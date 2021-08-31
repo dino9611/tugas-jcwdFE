@@ -1,0 +1,27 @@
+POST http://localhost:7000/posts HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Masak Masak Vol.2",
+    "author": "Hilmo"
+}
+
+###
+PATCH   http://localhost:7000/posts/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Tidur"
+}
+
+###
+PUT http://localhost:7000/posts/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Tidur"
+}
+
+###
+DELETE    http://localhost:7000/todo/3 HTTP/1.1
+Content-Type: application/json
