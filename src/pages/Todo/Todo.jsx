@@ -6,6 +6,7 @@ import { MdPlace } from "react-icons/md"
 import { FiEdit, FiTrash2 } from "react-icons/fi"
 import "./Todo.css";
 import axios from "axios";
+import { connect } from "react-redux"
 
 class Home extends Component {
     state = {
@@ -243,24 +244,14 @@ class Home extends Component {
     }
 
     // Cari Todo
-    // cariTodo = (e) => {
-    //     this.setState({ valueCari: e.target.value })
-    //     console.log(this.state.valueCari)
-    //     axios.get("http://localhost:7000/todo")
-    //         .then((res) => {
-    //             console.log(res.data)
-    //             this.setState({ todo: res.data })
-    //             let dupTodo = this.state.todo
-    //             console.log(dupTodo);
-    //             let hasilDupTodo = dupTodo.filter(val => {
-    //                 return val.kegiatan.toLowerCase().includes(hasilDupTodo)
-    //             })
-    //             this.setState({ todo: hasilDupTodo })
-    //         }).catch((err) => {
-    //             console.log(err)
-    //         })
-
-    // }
+    cariTodo = (e) => {
+        axios.get(`http://localhost:7000/todo?kegiatan_like=${e.target.value}`)
+            .then((res) => {
+                this.setState({ todo: res.data })
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
 
 
     render() {
@@ -313,9 +304,44 @@ class Home extends Component {
                 <div className="row d-flex justify-content-center my-xl-4">
                     {this.renderToDo()}
                 </div>
+
+
+
+                <button onClick={this.props.kurangin}>kurrrang</button>
+                {this.props.tambahan}
+                <button onClick={this.props.tambahin}>baen</button>
+
+                {this.props.perkalian}
+                <button onClick={() => this.props.perkalianAct("4")}>hey</button>
             </div>
         )
     }
 }
 
-export default Home;
+const MapStateToProps = (state) => {
+    return {
+        tambahan: state.tambahan,
+        perkalian: state.perkalian
+    }
+}
+
+const tambahin = () => {
+    return {
+        type: "TAMBAH"
+    }
+}
+
+const kurangin = () => {
+    return {
+        type: "KURANG"
+    }
+}
+
+const perkalianAct = (input) => {
+    return {
+        type: "KALI",
+        haha: input
+    }
+}
+
+export default connect(MapStateToProps, { tambahin, kurangin, perkalianAct })(Home);
