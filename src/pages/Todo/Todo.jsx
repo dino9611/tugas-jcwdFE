@@ -30,7 +30,8 @@ class Home extends Component {
             durasi: "0",
             tempat: "",
             gambar: ""
-        }
+        },
+        valueCari: ""
     }
 
     componentDidMount() {
@@ -241,6 +242,27 @@ class Home extends Component {
         })
     }
 
+    // Cari Todo
+    // cariTodo = (e) => {
+    //     this.setState({ valueCari: e.target.value })
+    //     console.log(this.state.valueCari)
+    //     axios.get("http://localhost:7000/todo")
+    //         .then((res) => {
+    //             console.log(res.data)
+    //             this.setState({ todo: res.data })
+    //             let dupTodo = this.state.todo
+    //             console.log(dupTodo);
+    //             let hasilDupTodo = dupTodo.filter(val => {
+    //                 return val.kegiatan.toLowerCase().includes(hasilDupTodo)
+    //             })
+    //             this.setState({ todo: hasilDupTodo })
+    //         }).catch((err) => {
+    //             console.log(err)
+    //         })
+
+    // }
+
+
     render() {
         return (
             <div className="m-4 m-xl-4">
@@ -287,6 +309,7 @@ class Home extends Component {
 
                 <h1 className="text-center">To Do List</h1>
                 <button onClick={this.toggleModalHandler} className="btn btn-outline-primary mb-3 my-xl-3">Add To Do</button>
+                <input type="text" id="cari" placeholder="Cari..." onInput={this.cariTodo} className="p-xl-1 mx-xl-3 border rounded border-primary"></input>
                 <div className="row d-flex justify-content-center my-xl-4">
                     {this.renderToDo()}
                 </div>
