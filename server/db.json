@@ -1,0 +1,58 @@
+{
+  "todo": [
+    {
+      "id": 1,
+      "kegiatan": "Belajar",
+      "tanggal": "2021-08-05",
+      "jam": "19:00",
+      "durasi": "2",
+      "tempat": "Rumah",
+      "gambar": "https://static.republika.co.id/uploads/images/inpicture_slide/belajar-ilustrasi-_160204092221-401.jpg"
+    },
+    {
+      "kegiatan": "Mancing",
+      "tanggal": "2021-09-22",
+      "jam": "10:38",
+      "durasi": "5",
+      "tempat": "Kolam",
+      "gambar": "https://asset.kompas.com/crop/26x0:1039x675/750x500/data/photo/2019/07/28/5d3d6cc483aed.jpg",
+      "id": 2
+    },
+    {
+      "kegiatan": "Tidur",
+      "tanggal": "2021-09-03",
+      "jam": "15:04",
+      "durasi": "5",
+      "tempat": "Rumah",
+      "gambar": "https://asset.kompas.com/crops/2mbnZmIpLgr9Z6Yaq33BhivMals=/0x0:694x463/750x500/data/photo/2018/11/08/1906697664.jpg",
+      "id": 3
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "title": "Tidur",
+      "author": "Hilmo",
+      "id": 2
+    },
+    {
+      "title": "Masak Masak Vol.2",
+      "author": "Hilmo",
+      "id": 3
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
