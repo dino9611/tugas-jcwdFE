@@ -9,6 +9,7 @@ import {
   NavLink,
   NavbarText
 } from 'reactstrap';
+import {Link} from "react-router-dom";
 
 const NaviBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,9 +24,16 @@ const NaviBar = (props) => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/components/">To-Do List</NavLink>
+              <NavLink>
+                <Link to="/">To-Do List</Link>
+              </NavLink>
             </NavItem>
-            <NavbarText>Recipe Feature</NavbarText>
+            <NavbarText>
+              <Link to="/resep">Recipe Feature</Link>
+            </NavbarText>
+            <NavbarText>
+              <Link to="/test-router-page">Test Router Page</Link>
+            </NavbarText>
           </Nav>
         </Collapse>
       </Navbar>
