@@ -1,0 +1,25 @@
+.render-card-shdw {
+    box-shadow: 0px 5px 10px 3px rgba(192,192,192,0.75);
+    -webkit-box-shadow: 0px 5px 10px 3px rgba(192,192,192,0.75);
+    -moz-box-shadow: 0px 5px 10px 3px rgba(192,192,192,0.75);
+}
+
+.render-card-btn-wrap {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #dfdfdf;
+    border-bottom-left-radius: 10px;
+    border-right: none;
+    border-top: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.render-btn {
+    background-color: transparent;
+    border: none;
+}
+
+.right-btn-divider {
+    border-left: 2px solid #dfdfdf;
+}
