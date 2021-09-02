@@ -1,114 +1,122 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {
-    Card, CardImg, CardBody,
-    CardTitle, Spinner
-  } from 'reactstrap';
+import {ResepFilter, ResepCards} from '../components/resep_page_components';
+import {Spinner} from 'reactstrap';
 
 const ApiKey = "apiKey=13e0ca349c6643b6964304b33afd040d"
 const URL = `https://api.spoonacular.com/recipes`
 
 class Resep extends Component {
-    state={
-        loading: true,
+    state= {
         resep: [],
-        cuisines: ["japanese", "indian", "indian", "chinese", "thai", "Middle Eastern"],
-        cuisineChoices: "",
-        dietChoices: "",
-        diet: ["Gluten Free", "Ketogenic", "Vegetarian"]
+        cuisines: [
+                "Japanese", 
+                "Indian", 
+                "Chinese", 
+                "Thai", 
+                "Middle Eastern"
+            ],
+        diet: [
+                "Gluten Free", 
+                "Ketogenic", 
+                "Vegetarian"
+            ],
+        choosenCuisine: "",
+        choosenDiet: "",
+        loading: true,
     }
 
     componentDidMount(){
+        // Untuk akses GET data API menggunakan axios
         axios.get(`${URL}/complexSearch?${ApiKey}`)
+        // GET data dari url API diatas, tapi dari webnya hanya ngasih data 10 item teratas dari ribuan
         .then((response) => {
             console.log(response.data);
             this.setState({resep: response.data.results});
-        }).catch((err) => {
-            console.log(err);
+            console.log(this.state.resep)
+            // response.data adalah semua hasil dari data yg di-GET (array of objects, kasih .result utk select property nya, karena JSON bisa diperlakukan seperti JS, dan dari penyedia data object[0] propertynya "results" yg dalamnya ada array of objects berisi data2 resep)
+            // Bagian ini juga bertujuan utk GET data biar masuk ke state kita agar bisa digunakan (ex: map)
+        }).catch((error) => {
+            console.log(error);
             alert("Server Error");
+            // Klo promise diatas gagal akan masuk kesini
         }).finally(() => {
             this.setState({loading: false})
         })
+        // Ini bersifat asynchronous, jd klo mau lanjut kodingan ga bs dibagian sini, tapi masukin di dalam .then(response)
     }
 
+    // ONCLICK EVENT FUNCTIONS SECTION
     onCardClick = () => {
 
     }
 
-    renderResep = () => {
-        return this.state.resep.map((val, index) => {
-            return (
-                <div key={index} className="col-md-3 my-2">
-                    <Card className="recipe-card-height" onClick={this.onCardClick}>
-                        <CardImg top width="100%" src={val.image} alt={`resep-image-${index}`} />
-                        <CardBody>
-                            <CardTitle tag="h5">{val.title}</CardTitle>
-                        </CardBody>
-                    </Card>
-                </div>
-            );
-        })
-
-    }
-
-    onSearchClick= () => {
+    submitSearchClick= () => {
         let url= `${URL}/complexSearch?${ApiKey}`
-        const {cuisineChoices, dietChoices} = this.state
-        if(cuisineChoices){
-            url+= `&cuisine=${cuisineChoices}`
+        const {choosenCuisine, choosenDiet} = this.state
+        if (choosenCuisine && choosenDiet) {
+            url+= `&cuisine=${choosenCuisine}&diet=${choosenDiet}`
+        } else if (choosenCuisine) {
+            url+= `&cuisine=${choosenCuisine}`
+        } else if (choosenDiet) {
+            url+= `&diet=${choosenDiet}`
         }
         this.setState({resep: [], loading: true})
+        // Biar ada efek loading dahulu dan animasi spinner berjalan dlu baru GET data
         axios.get(`${url}`)
         .then((response) => {
             console.log(response.data);
             this.setState({resep: response.data.results});
-        }).catch((err) => {
-            console.log(err);
+        }).catch((error) => {
+            console.log(error);
             alert("Server Error");
         }).finally(() => {
             this.setState({loading: false})
         })
+        // Bila hasil berhasil masuk ke .then, atau gagal ke .catch, intinya finally (ujungnya) masuk ke .finally
+        // Kasus ini finally untuk set loading false biar si spinner ga muter terus
+        
     }
 
+    // HANDLER FUNCTIONS SECTION
     inputHandler = (event) => {
         this.setState({[event.target.name]: event.target.value})
     }
 
+    // RENDER SEARCH FILTER SECTION
     renderCuisines = () => {
         return this.state.cuisines.map((val) => {
+            return <option key={val} value={val}> {val} </option>
+            // Loopin utk render opsi2 si Cuisines
+        })
+    }
+
+    renderDiet = () => {
+        return this.state.diet.map((val) => {
             return <option key={val} value={val}> {val} </option>
         })
     }
 
+    removeFilter = () => {
+        document.getElementById("filterCuisinePill").style.display = "none";
+        document.getElementById("test").value = "";
+        this.setState({choosenCuisine: ""})
+    }
+
     render() {
+        const {choosenCuisine, choosenDiet, resep} = this.state
         return (
             <div className="container">
-
-                <div>
-                    <select name="cuisineChoices" onChange={this.inputHandler} className="form-control">
-                        <option value="">All Cuisines</option>
-                        {this.renderCuisines()}
-                    </select>
-                    <select className="form-control">
-                        <option value="">All Diet</option>
-                    </select>
-                </div>
-                
-                <div style={{height: "5vh"}} className="py-2">
-                    {
-                        this.state.cuisineChoices?
-                        <div className="btn btn-outline-success">
-                            {this.state.cuisineChoices} X
-                        </div>
-                        :
-                        null
-                    }
-                </div>
-                <div>
-                    <button className="btn btn-primary my-1" onClick={this.onSearchClick} >
-                        Search
-                    </button>
-                </div>
+                <ResepFilter 
+                    inputHandler={this.inputHandler} 
+                    renderCuisines={this.renderCuisines} 
+                    renderDiet={this.renderDiet}
+                    choosenCuisine={choosenCuisine}
+                    choosenDiet={choosenDiet}
+                    submitSearchClick={this.submitSearchClick}
+                    removeFilter={this.removeFilter}
+                />
+                    {/* Klo loading: true, maka animasi spinner dibawah ini akan berjalan */}
                     {
                         this.state.loading?
                         <div className="container">
@@ -117,12 +125,20 @@ class Resep extends Component {
                             </div>
                         </div>:
                         <div className="row justify-content-center">
-                            {this.renderResep()}
+                            <ResepCards resep={resep} onCardClick={this.onCardClick} />
                         </div>
                     }
+                    {/* Diatas pake ternary, biar bisa kebaca walaupun oneline */}
             </div>
         );
     }
 }
 
 export default Resep;
+
+// PR
+// 1. Buat tampilan lbh bagus
+// 2. Searching (Bisa filter by cuisine & diet), tapi klo return no data, blm bisa tampilin "Data tidak ditemukan"
+// 3. Filtered button klo klik close ilang (Bru setengah)
+// 4. Kasih skeleton
+// 5. Di klik muncul modal ada list ingredient (bisa pilih satuannya)
