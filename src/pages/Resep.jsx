@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {ResepFilter, ResepCards} from '../components/resep_page_components';
+import {ResepFilter, ResepCards, IngredientsModal} from '../components/resep_page_components';
 import {Spinner} from 'reactstrap';
 
 const ApiKey = "apiKey=13e0ca349c6643b6964304b33afd040d"
@@ -24,6 +24,9 @@ class Resep extends Component {
         choosenCuisine: "",
         choosenDiet: "",
         loading: true,
+        ingredientSelected: [],
+        recipeNameSelected: "",
+        modal: false
     }
 
     componentDidMount(){
@@ -47,8 +50,14 @@ class Resep extends Component {
     }
 
     // ONCLICK EVENT FUNCTIONS SECTION
-    onCardClick = () => {
-
+    onCardClick = (id, name) => {
+        axios.get(`${URL}/${id}/ingredientWidget.json?${ApiKey}`)
+        .then((response) => {
+            this.setState({ingredientSelected: response.data.ingredients, modal: true, recipeNameSelected: name})
+        }).catch((error) => {
+            console.log(error);
+            alert(error);
+        })
     }
 
     submitSearchClick= () => {
@@ -78,10 +87,12 @@ class Resep extends Component {
         
     }
 
-    // HANDLER FUNCTIONS SECTION
+    // HANDLER & TOGGLE FUNCTIONS SECTION
     inputHandler = (event) => {
         this.setState({[event.target.name]: event.target.value})
     }
+
+    toggle = () => this.setState({modal:!this.state.modal})
 
     // RENDER SEARCH FILTER SECTION
     renderCuisines = () => {
@@ -97,14 +108,16 @@ class Resep extends Component {
         })
     }
 
-    removeFilter = () => {
-        document.getElementById("filterCuisinePill").style.display = "none";
-        document.getElementById("test").value = "";
+    removeFilterEdit = () => {
         this.setState({choosenCuisine: ""})
     }
 
+    removeFilterDiet = () => {
+        this.setState({choosenDiet: ""})
+    }
+
     render() {
-        const {choosenCuisine, choosenDiet, resep} = this.state
+        const {choosenCuisine, choosenDiet, resep, modal, ingredientSelected, recipeNameSelected} = this.state
         return (
             <div className="container">
                 <ResepFilter 
@@ -114,7 +127,15 @@ class Resep extends Component {
                     choosenCuisine={choosenCuisine}
                     choosenDiet={choosenDiet}
                     submitSearchClick={this.submitSearchClick}
-                    removeFilter={this.removeFilter}
+                    removeFilterEdit={this.removeFilterEdit}
+                    removeFilterDiet={this.removeFilterDiet}
+                />
+                <IngredientsModal 
+                    modal={modal}
+                    toggle={this.toggle}
+                    ingredientSelected={ingredientSelected}
+                    resep={resep}
+                    recipeNameSelected={recipeNameSelected}
                 />
                     {/* Klo loading: true, maka animasi spinner dibawah ini akan berjalan */}
                     {
@@ -138,7 +159,7 @@ export default Resep;
 
 // PR
 // 1. Buat tampilan lbh bagus
-// 2. Searching (Bisa filter by cuisine & diet), tapi klo return no data, blm bisa tampilin "Data tidak ditemukan"
-// 3. Filtered button klo klik close ilang (Bru setengah)
+// 2. Searching (Bisa filter by cuisine & diet) [DONE]
+// 3. Filtered button klo klik close ilang [DONE]
 // 4. Kasih skeleton
-// 5. Di klik muncul modal ada list ingredient (bisa pilih satuannya)
+// 5. Di klik muncul modal ada list ingredient (bisa pilih satuannya) [DONE]

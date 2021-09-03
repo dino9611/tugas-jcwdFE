@@ -1,0 +1,41 @@
+### CRUD (CREATE READ UPDATE DELETE)
+### POST (CREATE)
+POST http://localhost:5000/posts HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Kariage Kun",
+    "author": "Masashi Ueda"
+}
+
+### Klo mau kasih syntax CRUD lebih dari 1 | GET (READ)
+GET http://localhost:5000/todos HTTP/1.1
+Content-Type: application/json
+
+### Untuk edit value per property (ingat kasih path file nya ya, misal mau edit yg ke-2, ksh /2)
+PATCH http://localhost:5000/posts/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Kobo Chan"
+}
+
+### PUT merubah semuanya, jadi property baru nya hanya sesuai yg diinput dgn PUT | PUT (UPDATE)
+PUT http://localhost:5000/posts/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Crayon Shinchan"
+}
+
+### Klo property nya sblmnya ga ada gimana? Dgn PATCH dia akan nambah baru, tp data itu jarang property nya beda2 (harap ingat yaa), klo ini hanya utk latihan & pemahaman | PATCH (UPDATE)
+PATCH http://localhost:5000/posts/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "volume": 13
+}
+
+### Klo delete ga perlu input apa2, tp klo delete data ditengah2, nnti ID nya akan nambah kontinu tanpa ngisi ulang yg di-delete ditengah2 (biar ketauan ada data pernah di-modify) | DELETE (DELETE)
+DELETE http://localhost:5000/posts/2 HTTP/1.1
+Content-Type: application/json

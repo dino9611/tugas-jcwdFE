@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import "./styles/filter_render.css"
 
 class ResepFilter extends Component {
     state = {};
 
     render() {
-        const {inputHandler, renderCuisines, renderDiet, choosenCuisine, choosenDiet, submitSearchClick, removeFilter} = this.props
+        const {inputHandler, renderCuisines, renderDiet, choosenCuisine, choosenDiet, submitSearchClick, removeFilterEdit, removeFilterDiet} = this.props
         return (
             <>
                 <div>
@@ -13,16 +12,19 @@ class ResepFilter extends Component {
                         name="choosenCuisine" 
                         onChange={inputHandler} 
                         className="form-control"
-                        id="test"
+                        value={this.props.choosenCuisine}
+                        // Ga bisa pake destructuring, karena dia ga dinamis gonta ganti state, jadi akalinnya pake this.props walau diatas udh destructuring, klo ga nnti remove filter tp input nya ga balik ke default
                     >
                         <option value="">All Cuisines</option>
                         {renderCuisines()}
                         {/* Pake () ya, biar lsg jalan dan render list cuisines nya */}
-                    </select>
+                    </select> 
                     <select 
                         name="choosenDiet" 
                         onChange={inputHandler} 
                         className="form-control"
+                        value={this.props.choosenDiet}
+                        // Ga bisa pake destructuring, karena dia ga dinamis gonta ganti state, jadi akalinnya pake this.props walau diatas udh destructuring, klo ga nnti remove filter tp input nya ga balik ke default
                     >
                         <option value="">All Diet</option>
                         {renderDiet()}
@@ -35,8 +37,8 @@ class ResepFilter extends Component {
                     {/* Dibawah pake ternary */}
                     {
                         choosenCuisine ?
-                        <div id="filterCuisinePill" className="btn btn-outline-success" onClick={removeFilter}>
-                            {choosenCuisine} X
+                        <div className="btn btn-outline-success">
+                            {choosenCuisine} <span onClick={removeFilterEdit}>X</span>
                         </div>
                         :
                         null
@@ -44,7 +46,7 @@ class ResepFilter extends Component {
                     {
                         choosenDiet ?
                         <div className="btn btn-outline-success">
-                            {choosenDiet} X
+                            {choosenDiet} <span onClick={removeFilterDiet}>X</span>
                         </div>
                         :
                         null

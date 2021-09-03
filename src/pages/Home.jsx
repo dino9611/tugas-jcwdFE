@@ -1,47 +1,11 @@
 import React, {Component} from "react";
-import {Container, Row} from 'reactstrap';
+import {Container, Row, Spinner} from 'reactstrap';
 import {HomeModal, RenderTabel03, DeleteModal, EditModal} from "../components/"
+import axios from "axios"
 
 class Home extends Component {
     state = {
-        todo: [
-            {
-              tanggal: "2021-08-25",
-              jam: "19:00",
-              kegiatan: "Masak",
-              tempat: "Dapur",
-              waktuKegiatan: 2,
-              gambar:
-                "https://i2.wp.com/resepkoki.id/wp-content/uploads/2017/08/masak-bersih1.jpg?fit=1920%2C1280&ssl=1",
-            },
-            {
-              tanggal: "2021-08-26",
-              jam: "10:00",
-              kegiatan: "Dagang",
-              tempat: "Local Market",
-              waktuKegiatan: 5,
-              gambar:
-                "https://cdn.idntimes.com/content-images/community/2020/09/photo-1528952686551-542043782ab9-220a0e9189588b4419ad98cc1b5e5fe9_600x400.jpeg",
-            },
-            {
-              tanggal: "2021-08-26",
-              jam: "08:00",
-              kegiatan: "Hiking",
-              tempat: "Gunung",
-              waktuKegiatan: 3,
-              gambar:
-                "https://images.theconversation.com/files/405661/original/file-20210610-18-imwshy.jpg?ixlib=rb-1.1.0&rect=6%2C0%2C4486%2C2997&q=45&auto=format&w=926&fit=clip",
-            },
-            {
-              tanggal: "2021-08-28",
-              jam: "01:00",
-              kegiatan: "Stargazing",
-              tempat: "Bukit Teletabis",
-              waktuKegiatan: 2,
-              gambar:
-                "https://media.cntraveler.com/photos/60f5a7fa964f812d9f962ceb/master/pass/Stargazing-2021_PRK0G2.jpg",
-            }
-          ],
+        todo: [],
           modalOpen: false,
           modalDel: false,
           modalEdit: false,
@@ -63,6 +27,18 @@ class Home extends Component {
             waktuKegiatan: "0",
             gambar: ""
         },
+        loading: true
+    }
+
+    componentDidMount() {
+        axios.get(`http://localhost:5000/todos`)
+        .then((response) => {
+            this.setState({todo: response.data })
+        }).catch((error) => {
+            console.log(error)
+        }).finally(() => {
+            this.setState({loading: false})
+        })
     }
 
     // INPUT RELATED FUNCTIONS SECTION
@@ -83,17 +59,31 @@ class Home extends Component {
             alert("Harap isi semua!");
             return;
         }
-        let newToDo = this.state.todo;
-        newToDo.push(this.state.dataAdd);
-        let restartDataAdd = {
-            tanggal: "",
-            jam: "",
-            kegiatan: "",
-            tempat: "",
-            waktuKegiatan: "0",
-            gambar: ""
-        };
-        this.setState({todo: newToDo, dataAdd: restartDataAdd, modalOpen: false});
+
+        // Parameter kedua adalah datanya (yg mau kita kirim)
+        // this.state.dataAdd harus object
+        axios.post(`http://localhost:5000/todos`, this.state.dataAdd)
+        .then((response) => {
+            console.log(response.data)
+            axios.get(`http://localhost:5000/todos`) // GET ulang buat dapetin data yg baru
+            .then((response1) => {
+                let restartDataAdd = {
+                        tanggal: "",
+                        jam: "",
+                        kegiatan: "",
+                        tempat: "",
+                        waktuKegiatan: "0",
+                        gambar: ""
+                    };
+                this.setState({todo: response1.data, dataAdd: restartDataAdd, modalOpen: false});
+            }).catch((error1) => {
+                console.log(error1)
+                alert("Server Error")
+            })
+        }).catch((error) => {
+            console.log(error)
+            alert("Server Error")
+        })
     } 
 
     // DELETE RELATED FUNCTIONS SECTION
@@ -107,12 +97,25 @@ class Home extends Component {
 
     confirmDelTask = () => {
         let {todo, indexDel} = this.state;
-        let newToDo = todo;
-        newToDo.splice(indexDel, 1);
-        this.setState({
-            todo: newToDo,
-            indexDel: -1,
-            modalDel: !this.state.modalDel,
+        let idDelete = todo[indexDel].id // Utk track task mana yg akan di-delete
+
+        axios.delete(`http://localhost:5000/todos/${idDelete}`, this.state.dataAdd)
+        .then((response) => {
+            console.log(response.data)
+            axios.get(`http://localhost:5000/todos`)
+            .then((response1) => {
+                this.setState({
+                    todo: response1.data, 
+                    indexDel: -1, 
+                    modalDel: !this.state.modalDel
+                });
+            }).catch((error1) => {
+                console.log(error1)
+                alert("Server Error")
+            })
+        }).catch((error) => {
+            console.log(error)
+            alert("Server Error")
         })
     }
 
@@ -139,17 +142,35 @@ class Home extends Component {
             return;
         }
         let {indexEdit, todo, dataEdit} = this.state;
-        let editedToDo = todo;
-        editedToDo.splice(indexEdit, 1, dataEdit);
-        let restartDataEdit = {
-            tanggal: "",
-            jam: "",
-            kegiatan: "",
-            tempat: "",
-            waktuKegiatan: "0",
-            gambar: ""
-        };
-        this.setState({todo: editedToDo, dataEdit: restartDataEdit, modalEdit: false});
+        let idEdit = todo[indexEdit].id
+
+        // Karena data editnya property dibawa semua, jadi bisa pake PATCH / PUT
+        axios.put(`http://localhost:5000/todos/${idEdit}`, dataEdit)
+        .then((response) => {
+            console.log(response.data)
+            axios.get(`http://localhost:5000/todos`)
+            .then((response1) => {
+                let restartDataEdit = {
+                        tanggal: "",
+                        jam: "",
+                        kegiatan: "",
+                        tempat: "",
+                        waktuKegiatan: "0",
+                        gambar: ""
+                    };
+                alert("Berhasil ubah data")
+                this.setState({
+                    todo: response1.data, 
+                    dataAdd: restartDataEdit, 
+                    modalEdit: false});
+            }).catch((error1) => {
+                console.log(error1)
+                alert("Server Error")
+            })
+        }).catch((error) => {
+            console.log(error)
+            alert("Server Error")
+        })
     }
 
     render() {
@@ -171,21 +192,28 @@ class Home extends Component {
                 <EditModal modalEdit={modalEdit} toggle={this.toggleEditHandler} todo={todo} indexEdit={indexEdit} onEditInputHandler={this.onEditInputHandler} dataEdit={dataEdit} saveEditTask={this.saveEditTask} />
                 
                 {/* RENDER TABEL COMPONENT */}
-                <Container className="mb-5">
-                    <Row>
-                        {this.state.todo.map((data, index) => {
-                                return (
-                                    <RenderTabel03 
-                                        key={index} 
-                                        data={data} 
-                                        index={index} 
-                                        deleteTask={this.deleteTask} 
-                                        editTask={this.editTask} 
-                                    />
-                                );
-                        })}
-                    </Row>
-                </Container>
+                {
+                    this.state.loading?
+                    <div className="d-flex justify-content-center align-items-center">
+                        <Spinner color="primary" />
+                    </div>
+                    :
+                    <Container className="mb-5">
+                        <Row>
+                            {this.state.todo.map((data, index) => {
+                                    return (
+                                        <RenderTabel03 
+                                            key={index} 
+                                            data={data} 
+                                            index={index} 
+                                            deleteTask={this.deleteTask} 
+                                            editTask={this.editTask} 
+                                        />
+                                    );
+                            })}
+                        </Row>
+                    </Container>
+                }
             </div>
         );
     }

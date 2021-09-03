@@ -1,0 +1,75 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "tanggal": "2021-08-25",
+      "jam": "19:00",
+      "kegiatan": "Masak",
+      "tempat": "Dapur",
+      "waktuKegiatan": 2,
+      "gambar": "https://i2.wp.com/resepkoki.id/wp-content/uploads/2017/08/masak-bersih1.jpg?fit=1920%2C1280&ssl=1"
+    },
+    {
+      "id": 2,
+      "tanggal": "2021-08-26",
+      "jam": "10:00",
+      "kegiatan": "Dagang",
+      "tempat": "Local Market",
+      "waktuKegiatan": 5,
+      "gambar": "https://cdn.idntimes.com/content-images/community/2020/09/photo-1528952686551-542043782ab9-220a0e9189588b4419ad98cc1b5e5fe9_600x400.jpeg"
+    },
+    {
+      "id": 3,
+      "tanggal": "2021-08-26",
+      "jam": "08:00",
+      "kegiatan": "Hiking",
+      "tempat": "Gunung",
+      "waktuKegiatan": 3,
+      "gambar": "https://images.theconversation.com/files/405661/original/file-20210610-18-imwshy.jpg?ixlib=rb-1.1.0&rect=6%2C0%2C4486%2C2997&q=45&auto=format&w=926&fit=clip"
+    },
+    {
+      "tanggal": "2021-08-28",
+      "jam": "01:00",
+      "kegiatan": "Stargazing",
+      "tempat": "Bukit Teletabis",
+      "waktuKegiatan": 2,
+      "gambar": "https://media.cntraveler.com/photos/60f5a7fa964f812d9f962ceb/master/pass/Stargazing-2021_PRK0G2.jpg"
+    },
+    {
+      "tanggal": "2021-09-05",
+      "jam": "19:37",
+      "kegiatan": "BBQ",
+      "tempat": "Backyard",
+      "waktuKegiatan": "5",
+      "gambar": "https://asset.kompas.com/crops/NYKjhZ0ZFJ6gfjTRomumQ_Lmi3s=/90x8:990x608/750x500/data/photo/2019/12/21/5dfda965d917d.jpg",
+      "id": 5
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "title": "Kariage Kun",
+      "author": "Masashi Ueda",
+      "id": 3
+    },
+    {
+      "title": "Kariage Kun",
+      "author": "Masashi Ueda",
+      "id": 4
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
