@@ -23,16 +23,19 @@ const NaviBar = (props) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
-            <NavItem>
+            <NavItem className="mr-3">
               <NavLink>
                 <Link to="/">To-Do List</Link>
               </NavLink>
             </NavItem>
-            <NavbarText>
+            <NavbarText className="mr-3">
               <Link to="/resep">Recipe Feature</Link>
             </NavbarText>
-            <NavbarText>
+            <NavbarText className="mr-3">
               <Link to="/test-router-page">Test Router Page</Link>
+            </NavbarText>
+            <NavbarText className="mr-3">
+              <Link to="/hitungkata">Hitung Kata</Link>
             </NavbarText>
           </Nav>
         </Collapse>

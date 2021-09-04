@@ -5,6 +5,7 @@ import Footer from "./components/footer"
 import Resep from './pages/Resep';
 import {TestRouter, NotFound} from './components';
 import {Switch, Route} from "react-router-dom"
+import HitungKata from './pages/Hitung_Kata';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         {/* Klo ada exact brarti harus spesifik /, ga ada wildcard di selanjutnya (ex: /pages) itu ga bisa */}
         <Route path="/resep" component={Resep} />
         <Route path="/test-router-page" component={TestRouter} />
+        <Route path="/hitungkata" component={HitungKata} />
         <Route path="*" component={NotFound} />
       </Switch>
       <Footer />
